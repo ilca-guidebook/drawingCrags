@@ -13,3 +13,7 @@ A small app for loading crag images, drawing route lines on the image and export
 ## Running
 
 > npm start
+
+## Deploy to Github Page:
+
+> npm run deploy
