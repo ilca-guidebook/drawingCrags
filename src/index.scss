@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+// stylelint-disable
+$spacer: 1rem !default;
+$spacers: () !default;
+$spacers: map-merge(
+  (
+    0: 0,
+    1: (
+      $spacer * 0.25
+    ),
+    2: (
+      $spacer * 0.5
+    ),
+    3: $spacer,
+    4: (
+      $spacer * 1.5
+    ),
+    5: (
+      $spacer * 3
+    ),
+    6: (
+      $spacer * 5
+    ),
+    7: (
+      $spacer * 8
+    ),
+    8: (
+      $spacer * 12
+    )
+  ),
+  $spacers
+);
+
+$infix: "";
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in $spacers {
+    .#{$abbrev}#{$infix}-#{$size} {
+      #{$prop}: $length !important;
+    }
+    .#{$abbrev}t#{$infix}-#{$size},
+    .#{$abbrev}y#{$infix}-#{$size} {
+      #{$prop}-top: $length !important;
+    }
+    .#{$abbrev}r#{$infix}-#{$size},
+    .#{$abbrev}x#{$infix}-#{$size} {
+      #{$prop}-right: $length !important;
+    }
+    .#{$abbrev}b#{$infix}-#{$size},
+    .#{$abbrev}y#{$infix}-#{$size} {
+      #{$prop}-bottom: $length !important;
+    }
+    .#{$abbrev}l#{$infix}-#{$size},
+    .#{$abbrev}x#{$infix}-#{$size} {
+      #{$prop}-left: $length !important;
+    }
+  }
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}

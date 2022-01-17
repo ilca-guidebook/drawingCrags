@@ -1,0 +1,76 @@
+.drawingCrags {
+  margin-top: 20px;
+  height: 600px;
+  width: 1200px;
+  margin: auto;
+}
+
+.imageContainer {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  height: 100%;
+  border: 2px solid #d5d5d5;
+}
+.cragImage {
+  position: absolute;
+}
+
+.svgContainer {
+  z-index: 2;
+  position: absolute;
+  transform-origin: top left;
+  // pointer-events: none;
+}
+
+@mixin btn {
+  background-color: #c9c9c9;
+  display: inline-block;
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 90%;
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #b1b1b1;
+  cursor: pointer;
+}
+
+.btn {
+  @include btn;
+  margin-right: 6px;
+  &.last {
+    margin-right: 0;
+  }
+}
+
+.fileUpload {
+  margin-right: 6px;
+  @include btn;
+  input {
+    display: none;
+  }
+}
+
+.btnContainer {
+  display: flex;
+  width: 1200px;
+  margin: auto;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.lineName {
+  display: inline-block;
+  input {
+    height: 16px;
+    padding: 4px 10px;
+    margin-right: 6px;
+    color: #818181;
+    font-weight: bold;
+    font-size: 108%;
+  }
+}
+
+.lineEditor {
+  margin-top: 10px;
+}
