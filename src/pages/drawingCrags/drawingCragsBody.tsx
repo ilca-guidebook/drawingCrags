@@ -55,15 +55,17 @@ const DrawingCragsBody: React.FC = () => {
   };
   const handleExportData = async () => {
     downloadObjectAsJson(
-      drawingCragsStore.lines.map(line => {
-        return {
-          ...line,
-          points: line.points.map(point => ({
-            x: point.x / CONTAINER_WIDTH,
-            y: point.y / CONTAINER_HEIGHT
-          }))
-        };
-      })
+      drawingCragsStore.lines
+        .sort((lineA, lineB) => lineA.points[0].x - lineB.points[0].x)
+        .map(line => {
+          return {
+            ...line,
+            points: line.points.map(point => ({
+              x: point.x / CONTAINER_WIDTH,
+              y: point.y / CONTAINER_HEIGHT
+            }))
+          };
+        })
     );
   };
 
