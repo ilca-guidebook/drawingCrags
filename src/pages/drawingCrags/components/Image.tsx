@@ -20,7 +20,7 @@ const Image: React.FC<Props> = ({ image, imageStyle }) => {
 
     let height = 0;
     let width = 0;
-    // wider than conatiner
+    // wider than container
     if (imageRatio < ratio) {
       width = CONTAINER_WIDTH;
       height = t.height * (CONTAINER_WIDTH / t.width);
