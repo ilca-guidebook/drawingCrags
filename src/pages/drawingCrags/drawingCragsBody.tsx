@@ -11,6 +11,7 @@ import styles from "./drawingCrags.module.scss";
 import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from "./store/drawingCragsState";
 import { Line } from "./types";
 import LineEditor from "./components/LineEditor";
+import { toJS } from "mobx";
 
 const downloadObjectAsJson = (exportObj: Record<string, any>) => {
   const dataStr =
@@ -54,6 +55,13 @@ const DrawingCragsBody: React.FC = () => {
     }
   };
   const handleExportData = async () => {
+    drawingCragsStore.lines.forEach(line => {
+      // smaller y is higher
+      // if this case is true it means the first point is lower than the last point, so reverse
+      if (line.points[0].y < line.points[line.points.length - 1].y) {
+        line.points = line.points.reverse();
+      }
+    });
     downloadObjectAsJson(
       drawingCragsStore.lines
         .sort((lineA, lineB) => lineB.points[0].x - lineA.points[0].x)
@@ -61,8 +69,8 @@ const DrawingCragsBody: React.FC = () => {
           return {
             ...line,
             points: line.points.map(point => ({
-              x: point.x / CONTAINER_WIDTH,
-              y: point.y / CONTAINER_HEIGHT
+              x: point.x / imageDimensions.x,
+              y: point.y / imageDimensions.y
             }))
           };
         })

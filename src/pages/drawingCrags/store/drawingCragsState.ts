@@ -127,8 +127,8 @@ export default class drawingCragsState {
       return {
         ...line,
         points: line.points.map(point => ({
-          x: point.x * CONTAINER_WIDTH,
-          y: point.y * CONTAINER_HEIGHT
+          x: point.x * this.imageDimensions.x,
+          y: point.y * this.imageDimensions.y
         }))
       };
     });
