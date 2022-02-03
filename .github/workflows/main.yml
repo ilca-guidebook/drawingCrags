@@ -7,16 +7,9 @@ jobs:
   deploy-to-gh-pages:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2
-        
-      - name: Install and Build 🔧
+      - name: Deploy with gh-pages
         run: |
-          npm install
-          npm run build
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.2.3
-        with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: build # The folder the action should deploy.
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+           env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
