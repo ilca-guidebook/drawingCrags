@@ -64,7 +64,7 @@ const DrawingCragsBody: React.FC = () => {
     });
     downloadObjectAsJson(
       drawingCragsStore.lines
-        .sort((lineA, lineB) => lineB.points[0].x - lineA.points[0].x)
+        .sort((lineA, lineB) => lineA.points[0].x - lineB.points[0].x)
         .map(line => {
           return {
             ...line,
