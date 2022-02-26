@@ -8,10 +8,8 @@ import Image from "./components/Image";
 import PolylineContainer from "./components/PolylineContainer";
 
 import styles from "./drawingCrags.module.scss";
-import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from "./store/drawingCragsState";
 import { Line } from "./types";
 import LineEditor from "./components/LineEditor";
-import { toJS } from "mobx";
 
 const downloadObjectAsJson = (exportObj: Record<string, any>) => {
   const dataStr =
@@ -111,6 +109,14 @@ const DrawingCragsBody: React.FC = () => {
   const handleLineNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     drawingCragsStore.updateLineNewName(e.target.value);
   };
+
+  useEffect(() => {
+    document.addEventListener("keydown", drawingCragsStore.onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", drawingCragsStore.onKeyDown);
+    };
+  }, []);
 
   return (
     <div className={styles.drawingCrags}>
