@@ -17,9 +17,11 @@ const PolylineContainer: React.FC<Props> = ({ svgStyle }) => {
   const selectedLineId = drawingCragsStore.lines[drawingCragsStore.currentLineIndex]?.id;
   return (
     <svg className={styles.svgContainer} style={svgStyle}>
-      {drawingCragsStore.lines.map(line => (
-        <PolylineRenderer key={line.id} line={line} selected={selectedLineId === line.id} />
-      ))}
+      {drawingCragsStore.lines
+        .filter(({ points }) => points.length)
+        .map(({ id, points }) => {
+          return <PolylineRenderer key={id} points={points} selected={selectedLineId === id} />;
+        })}
     </svg>
   );
 };
