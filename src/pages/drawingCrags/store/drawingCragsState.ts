@@ -1,20 +1,27 @@
 import { makeAutoObservable } from "mobx";
-import { WheelEvent, UIEvent, MouseEvent } from "react";
+import { WheelEvent, UIEvent, MouseEvent, KeyboardEventHandler } from "react";
 import { Line, Pos } from "../types";
 import { v1 as uuid } from "uuid";
 
 export const CONTAINER_HEIGHT = 600;
 export const CONTAINER_WIDTH = 1200;
 
+enum MODES {
+  INITIAL = "initial",
+  IMAGE = "image",
+  LINE_EDITING = "lineEditing"
+}
+
 export default class drawingCragsState {
   public imageDimensions: Pos;
 
-  public mode: "lineEditing" | "image";
+  public mode: MODES;
 
   public container?: HTMLDivElement;
   public isDragging: boolean;
   public startPanPoz: Pos;
   public panPoz: Pos;
+  public draggedLine: Pos | null;
   public scale: number;
 
   public nameInInput: string;
@@ -28,10 +35,11 @@ export default class drawingCragsState {
     makeAutoObservable(this, {});
 
     this.isDragging = false;
-    this.mode = "lineEditing";
+    this.mode = MODES.INITIAL;
     this.imageDimensions = { x: 0, y: 0 };
     this.startPanPoz = { x: 0, y: 0 };
     this.panPoz = { x: 0, y: 0 };
+    this.draggedLine = null;
     this.scale = 1;
     this.lines = [];
     this.highlightedLineId = "";
@@ -47,19 +55,19 @@ export default class drawingCragsState {
   }
 
   public setIsDragging(isDragging: boolean) {
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       this.isDragging = isDragging;
     }
   }
 
   public handleMouseEnter = () => {
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       document.getElementsByTagName("body")[0].classList.add("stop-scrolling");
     }
   };
 
   public handleMouseLeave = () => {
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       document.getElementsByTagName("body")[0].classList.remove("stop-scrolling");
       this.setIsDragging(false);
     }
@@ -84,7 +92,7 @@ export default class drawingCragsState {
   public handleMouseDown = (e: MouseEvent) => {
     e.preventDefault();
     if (!this.imageLoaded) return;
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       this.setIsDragging(true);
       this.setStartPanPoz({ x: e.clientX - this.panPoz.x, y: e.clientY - this.panPoz.y });
     }
@@ -93,7 +101,7 @@ export default class drawingCragsState {
   public handleMouseUp = (e: MouseEvent) => {
     e.preventDefault();
     if (!this.imageLoaded) return;
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       this.setIsDragging(false);
     }
   };
@@ -101,19 +109,26 @@ export default class drawingCragsState {
   public handleMouseMove = (e: MouseEvent) => {
     e.preventDefault();
     if (!this.imageLoaded) return;
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       if (this.isDragging) {
         this.setPanPoz({
           x: e.clientX - this.startPanPoz.x,
           y: e.clientY - this.startPanPoz.y
         });
       }
+    } else if (this.mode === MODES.LINE_EDITING && this.container) {
+      const relativePointPos: Pos = {
+        x: e.clientX - this.container.offsetLeft + window.scrollX,
+        y: e.clientY - this.container.offsetTop + window.scrollY
+      };
+
+      this.draggedLine = relativePointPos;
     }
   };
 
   public handleWheel = (e: WheelEvent) => {
     if (!this.imageLoaded) return;
-    if (this.mode === "image") {
+    if (this.mode === MODES.IMAGE) {
       const _scale = Math.min(Math.max(0.125, this.scale + e.deltaY * -0.002), 4);
       this.setScale(_scale);
     }
@@ -172,19 +187,26 @@ export default class drawingCragsState {
   };
 
   public handleClick = (e: MouseEvent) => {
-    if (this.mode === "lineEditing") {
-      if (this.container) {
-        if (this.currentLineIndex < 0) {
-          alert("first create a new line with a name");
-          return;
-        }
-        const relativePointPos: Pos = {
-          x: e.clientX - this.container.offsetLeft + window.scrollX,
-          y: e.clientY - this.container.offsetTop + window.scrollY
-        };
+    if ((this.mode === MODES.INITIAL || this.mode === MODES.LINE_EDITING) && this.container) {
+      this.mode = MODES.LINE_EDITING;
 
-        this.lines[this.currentLineIndex].points.push(relativePointPos);
+      if (this.currentLineIndex < 0) {
+        alert("first create a new line with a name");
+        return;
       }
+      const relativePointPos: Pos = {
+        x: e.clientX - this.container.offsetLeft + window.scrollX,
+        y: e.clientY - this.container.offsetTop + window.scrollY
+      };
+
+      this.lines[this.currentLineIndex].points.push(relativePointPos);
+    }
+  };
+
+  public onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && this.mode === MODES.LINE_EDITING) {
+      this.mode = MODES.INITIAL;
+      this.draggedLine = null;
     }
   };
 }

@@ -179,6 +179,7 @@ const DrawingCragsBody: React.FC = () => {
         onMouseMove={drawingCragsStore.handleMouseMove}
         onWheel={drawingCragsStore.handleWheel}
         onScroll={drawingCragsStore.handleScroll}
+        style={svgStyle}
       >
         <Image image={image} imageStyle={imageStyle} />
         <PolylineContainer svgStyle={svgStyle} />
