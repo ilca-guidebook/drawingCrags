@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/drawingCrags/static/css/main.3c118567.chunk.css",
-    "main.js": "/drawingCrags/static/js/main.daf9f659.chunk.js",
-    "main.js.map": "/drawingCrags/static/js/main.daf9f659.chunk.js.map",
+    "main.css": "/drawingCrags/static/css/main.1c5378a8.chunk.css",
+    "main.js": "/drawingCrags/static/js/main.ed103128.chunk.js",
+    "main.js.map": "/drawingCrags/static/js/main.ed103128.chunk.js.map",
     "runtime-main.js": "/drawingCrags/static/js/runtime-main.45fbf1e7.js",
     "runtime-main.js.map": "/drawingCrags/static/js/runtime-main.45fbf1e7.js.map",
     "static/js/2.501de9f3.chunk.js": "/drawingCrags/static/js/2.501de9f3.chunk.js",
@@ -10,13 +10,13 @@
     "static/js/3.41d35014.chunk.js": "/drawingCrags/static/js/3.41d35014.chunk.js",
     "static/js/3.41d35014.chunk.js.map": "/drawingCrags/static/js/3.41d35014.chunk.js.map",
     "index.html": "/drawingCrags/index.html",
-    "static/css/main.3c118567.chunk.css.map": "/drawingCrags/static/css/main.3c118567.chunk.css.map",
+    "static/css/main.1c5378a8.chunk.css.map": "/drawingCrags/static/css/main.1c5378a8.chunk.css.map",
     "static/js/2.501de9f3.chunk.js.LICENSE.txt": "/drawingCrags/static/js/2.501de9f3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.45fbf1e7.js",
     "static/js/2.501de9f3.chunk.js",
-    "static/css/main.3c118567.chunk.css",
-    "static/js/main.daf9f659.chunk.js"
+    "static/css/main.1c5378a8.chunk.css",
+    "static/js/main.ed103128.chunk.js"
   ]
 }
