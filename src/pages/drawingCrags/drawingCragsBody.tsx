@@ -129,6 +129,7 @@ const DrawingCragsBody: React.FC = () => {
             <li>Upload click on the upload crag image button to upload an image</li>
             <li>Give a name to a line and create a new line</li>
             <li>Start clicking on the image to draw the line points</li>
+            <li>When done drawing a line, press "Escape" on keyboard to dismiss next point</li>
             <li>Export the result file using the Export Lines Data button</li>
           </ul>
         </div>
