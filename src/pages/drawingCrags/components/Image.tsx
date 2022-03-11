@@ -1,10 +1,10 @@
-import { observer } from "mobx-react-lite";
-import React, { SyntheticEvent } from "react";
+import { observer } from 'mobx-react-lite';
+import React, { SyntheticEvent } from 'react';
 
-import styles from "../drawingCrags.module.scss";
+import styles from '../drawingCrags.module.scss';
 
-import { useDrawingCragsStore } from "../store";
-import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from "../store/drawingCragsState";
+import { useDrawingCragsStore } from '../store';
+import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '../store/drawingCragsState';
 
 type Props = {
   image: string | undefined;

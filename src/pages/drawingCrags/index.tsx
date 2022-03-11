@@ -1,6 +1,6 @@
-import DrawingCragsBody from "./drawingCragsBody";
-import { DrawingCragsStoreProvider } from "./store";
-import DrawingCragsState from "./store/drawingCragsState";
+import DrawingCragsBody from './drawingCragsBody';
+import { DrawingCragsStoreProvider } from './store';
+import DrawingCragsState from './store/drawingCragsState';
 
 const drawingCragsState = new DrawingCragsState();
 
