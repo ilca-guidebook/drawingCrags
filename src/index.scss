@@ -1,13 +1,13 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 // stylelint-disable
@@ -17,32 +17,32 @@ $spacers: map-merge(
   (
     0: 0,
     1: (
-      $spacer * 0.25
+      $spacer * 0.25,
     ),
     2: (
-      $spacer * 0.5
+      $spacer * 0.5,
     ),
     3: $spacer,
     4: (
-      $spacer * 1.5
+      $spacer * 1.5,
     ),
     5: (
-      $spacer * 3
+      $spacer * 3,
     ),
     6: (
-      $spacer * 5
+      $spacer * 5,
     ),
     7: (
-      $spacer * 8
+      $spacer * 8,
     ),
     8: (
-      $spacer * 12
-    )
+      $spacer * 12,
+    ),
   ),
   $spacers
 );
 
-$infix: "";
+$infix: '';
 @each $prop, $abbrev in (margin: m, padding: p) {
   @each $size, $length in $spacers {
     .#{$abbrev}#{$infix}-#{$size} {

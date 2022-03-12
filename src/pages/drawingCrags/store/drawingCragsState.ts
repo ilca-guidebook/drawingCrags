@@ -1,15 +1,15 @@
-import { makeAutoObservable } from "mobx";
-import { WheelEvent, UIEvent, MouseEvent, KeyboardEventHandler } from "react";
-import { Line, Pos } from "../types";
-import { v1 as uuid } from "uuid";
+import { makeAutoObservable } from 'mobx';
+import { WheelEvent, UIEvent, MouseEvent } from 'react';
+import { Line, Pos } from '../types';
+import { v1 as uuid } from 'uuid';
 
 export const CONTAINER_HEIGHT = 600;
 export const CONTAINER_WIDTH = 1200;
 
 enum MODES {
-  INITIAL = "initial",
-  IMAGE = "image",
-  LINE_EDITING = "lineEditing"
+  INITIAL = 'initial',
+  IMAGE = 'image',
+  LINE_EDITING = 'lineEditing',
 }
 
 export default class drawingCragsState {
@@ -31,6 +31,14 @@ export default class drawingCragsState {
 
   public imageLoaded: boolean;
 
+  public isEditingLine: boolean;
+
+  public currentEditedPoint: {
+    active: boolean;
+    lineId: string;
+    pointIndex: number;
+  };
+
   constructor() {
     makeAutoObservable(this, {});
 
@@ -42,11 +50,18 @@ export default class drawingCragsState {
     this.draggedLine = null;
     this.scale = 1;
     this.lines = [];
-    this.highlightedLineId = "";
-    this.nameInInput = "";
+    this.highlightedLineId = '';
+    this.nameInInput = '';
 
     this.imageLoaded = false;
+    this.isEditingLine = false;
     this.currentLineIndex = -1;
+
+    this.currentEditedPoint = {
+      active: false,
+      lineId: '',
+      pointIndex: 0,
+    };
   }
 
   public setImageDimensions(pos: Pos) {
@@ -62,13 +77,13 @@ export default class drawingCragsState {
 
   public handleMouseEnter = () => {
     if (this.mode === MODES.IMAGE) {
-      document.getElementsByTagName("body")[0].classList.add("stop-scrolling");
+      document.getElementsByTagName('body')[0].classList.add('stop-scrolling');
     }
   };
 
   public handleMouseLeave = () => {
     if (this.mode === MODES.IMAGE) {
-      document.getElementsByTagName("body")[0].classList.remove("stop-scrolling");
+      document.getElementsByTagName('body')[0].classList.remove('stop-scrolling');
       this.setIsDragging(false);
     }
   };
@@ -113,13 +128,13 @@ export default class drawingCragsState {
       if (this.isDragging) {
         this.setPanPoz({
           x: e.clientX - this.startPanPoz.x,
-          y: e.clientY - this.startPanPoz.y
+          y: e.clientY - this.startPanPoz.y,
         });
       }
     } else if (this.mode === MODES.LINE_EDITING && this.container) {
       const relativePointPos: Pos = {
         x: e.clientX - this.container.offsetLeft + window.scrollX,
-        y: e.clientY - this.container.offsetTop + window.scrollY
+        y: e.clientY - this.container.offsetTop + window.scrollY,
       };
 
       this.draggedLine = relativePointPos;
@@ -143,8 +158,8 @@ export default class drawingCragsState {
         ...line,
         points: line.points.map(point => ({
           x: point.x * this.imageDimensions.x,
-          y: point.y * this.imageDimensions.y
-        }))
+          y: point.y * this.imageDimensions.y,
+        })),
       };
     });
   };
@@ -152,12 +167,12 @@ export default class drawingCragsState {
   public createNewLine = () => {
     // only create a new line if the old line has points in it
     if (!this.nameInInput) {
-      alert("Please enter a name for the line");
+      alert('Please enter a name for the line');
       return;
     }
 
     this.lines.push({ name: this.nameInInput, points: [], id: uuid() });
-    this.nameInInput = "";
+    this.nameInInput = '';
     this.currentLineIndex = this.lines.length - 1;
   };
 
@@ -191,22 +206,69 @@ export default class drawingCragsState {
       this.mode = MODES.LINE_EDITING;
 
       if (this.currentLineIndex < 0) {
-        alert("first create a new line with a name");
+        alert('first create a new line with a name');
         return;
       }
       const relativePointPos: Pos = {
         x: e.clientX - this.container.offsetLeft + window.scrollX,
-        y: e.clientY - this.container.offsetTop + window.scrollY
+        y: e.clientY - this.container.offsetTop + window.scrollY,
       };
 
       this.lines[this.currentLineIndex].points.push(relativePointPos);
     }
   };
 
+  public setLinePoint = (lineId: string, pointIndex: number, newPosition: Pos) => {
+    const lineIndex = this.lines.findIndex(line => line.id === lineId);
+
+    if (lineIndex !== -1) {
+      this.lines[lineIndex].points[pointIndex] = newPosition;
+    }
+  };
+
   public onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape" && this.mode === MODES.LINE_EDITING) {
+    if (e.key === 'Escape' && this.mode === MODES.LINE_EDITING) {
       this.mode = MODES.INITIAL;
       this.draggedLine = null;
+    }
+  };
+
+  public handlePointPointerDown = (
+    e: React.PointerEvent<SVGCircleElement>,
+    lineId: string,
+    pointIndex: number,
+  ) => {
+    const el = e.currentTarget;
+    el.setPointerCapture(e.pointerId);
+    this.currentEditedPoint = {
+      active: true,
+      lineId,
+      pointIndex,
+    };
+  };
+
+  public handleSvgPointerMove = (e: React.PointerEvent) => {
+    const { active, lineId, pointIndex } = this.currentEditedPoint;
+
+    if (active) {
+      const bbox = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - bbox.left;
+      const y = e.clientY - bbox.top;
+
+      this.setLinePoint(lineId, pointIndex, {
+        x,
+        y,
+      });
+    }
+  };
+
+  public handleSvgPointerUp = (e: React.PointerEvent) => {
+    if (this.currentEditedPoint.active) {
+      this.currentEditedPoint = {
+        active: false,
+        lineId: '',
+        pointIndex: 0,
+      };
     }
   };
 }
