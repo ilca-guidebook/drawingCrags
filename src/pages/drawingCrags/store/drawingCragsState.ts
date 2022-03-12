@@ -107,6 +107,7 @@ export default class drawingCragsState {
   public handleMouseDown = (e: MouseEvent) => {
     e.preventDefault();
     if (!this.imageLoaded) return;
+
     if (this.mode === MODES.IMAGE) {
       this.setIsDragging(true);
       this.setStartPanPoz({ x: e.clientX - this.panPoz.x, y: e.clientY - this.panPoz.y });
