@@ -6,7 +6,7 @@ repo_uri="https://x-access-token:${DEPLOY_TOKEN}@github.com/ilca-guidebook/drawi
 remote_name="origin"
 main_branch="main"
 target_branch="gh-pages"
-build_dir="dist"
+build_dir="build"
 
 cd "$GITHUB_WORKSPACE"
 
