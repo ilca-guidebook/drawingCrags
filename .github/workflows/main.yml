@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: ./bin/update-gh-pages
+      - run: ./update-gh-pages
         env:
           DEPLOY_TOKEN: ${{ secrets.GH_PAGES_DEPLOY }}
