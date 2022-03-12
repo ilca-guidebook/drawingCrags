@@ -23,31 +23,40 @@ const LineEditor: React.FC = () => {
     drawingCragsStore.updateSelectedLine(e.target.value);
   };
 
+  if (!drawingCragsStore.lines.length) {
+    return null;
+  }
+
   const selectedLine = drawingCragsStore.lines[drawingCragsStore.currentLineIndex];
 
-  if (!selectedLine) return null;
   return (
     <div className={styles.lineEditor}>
-      Line Editor
-      <div className={styles.btn} onClick={handleDeleteLastPoint}>
-        Delete last point
-      </div>
-      <div className={styles.btn} onClick={handleDeleteLine}>
-        Delete Line
-      </div>
-      <div style={{ display: 'inline-block' }}>
-        <span style={{ paddingRight: '6px' }}>Edit Line Name:</span>
-        <input type="text" onChange={handleLineNameChange} value={selectedLine.name} />
-      </div>
+      {selectedLine && (
+        <>
+          <div className={styles.btn} onClick={handleDeleteLastPoint}>
+            Delete last point
+          </div>
+          <div className={styles.btn} onClick={handleDeleteLine}>
+            Delete Line
+          </div>
+          <div style={{ display: 'inline-block' }}>
+            <span style={{ paddingRight: '6px' }}>Edit Line Name:</span>
+            <input type="text" onChange={handleLineNameChange} value={selectedLine?.name} />
+          </div>
+        </>
+      )}
       <div style={{ display: 'inline-block', marginLeft: '6px' }}>
         {drawingCragsStore.lines.length > 0 && (
           <>
-            Select Line:
+            Select line to edit:
             <select
               name="linesSelector"
               onChange={handleLineSelectedChange}
-              value={selectedLine.name}
+              value={selectedLine?.name}
             >
+              <option key="select-line" value="">
+                ---------
+              </option>
               {drawingCragsStore.lines.map(line => (
                 <option key={line.id} value={line.name}>
                   {line.name}

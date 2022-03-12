@@ -251,18 +251,14 @@ export default class drawingCragsState {
     const { active, lineId, pointIndex } = this.currentEditedPoint;
 
     if (active) {
-      const currentPoint = this.lines.find(line => line.id === lineId)?.points[pointIndex];
+      const bbox = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - bbox.left;
+      const y = e.clientY - bbox.top;
 
-      if (currentPoint) {
-        const bbox = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - bbox.left;
-        const y = e.clientY - bbox.top;
-
-        this.setLinePoint(lineId, pointIndex, {
-          x,
-          y,
-        });
-      }
+      this.setLinePoint(lineId, pointIndex, {
+        x,
+        y,
+      });
     }
   };
 
