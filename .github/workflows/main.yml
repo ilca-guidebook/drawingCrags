@@ -9,7 +9,8 @@ jobs:
     steps:
       - name: Deploy with gh-pages
         run: |
-          git remote set-url origin https://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@github.com/ilca-guidebook/drawingCrags.git
+          git remote add origin https://${DEPLOY_TOKEN}@github.com/ilca-guidebook/drawingCrags.git
+          git push
           npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
            env:
             DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
