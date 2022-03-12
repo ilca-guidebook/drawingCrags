@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/drawingCrags/static/css/main.fd968186.chunk.css",
-    "main.js": "/drawingCrags/static/js/main.e55984db.chunk.js",
-    "main.js.map": "/drawingCrags/static/js/main.e55984db.chunk.js.map",
+    "main.js": "/drawingCrags/static/js/main.eda06a82.chunk.js",
+    "main.js.map": "/drawingCrags/static/js/main.eda06a82.chunk.js.map",
     "runtime-main.js": "/drawingCrags/static/js/runtime-main.b567d2ee.js",
     "runtime-main.js.map": "/drawingCrags/static/js/runtime-main.b567d2ee.js.map",
     "static/js/2.186560ca.chunk.js": "/drawingCrags/static/js/2.186560ca.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.b567d2ee.js",
     "static/js/2.186560ca.chunk.js",
     "static/css/main.fd968186.chunk.css",
-    "static/js/main.e55984db.chunk.js"
+    "static/js/main.eda06a82.chunk.js"
   ]
 }
