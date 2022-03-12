@@ -3,7 +3,7 @@ import React from 'react';
 const Header = () => {
   return (
     <>
-      <h2>Drawing Crags</h2>
+      <h2>Drawing Crags 12</h2>
       <div>
         <div>Welcome to the drawing crags app!</div>
         <div>
