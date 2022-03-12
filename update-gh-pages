@@ -18,7 +18,8 @@ git rebase "${remote_name}/${main_branch}"
 
 # ./build "$build_dir"
 # git add "$build_dir"
-npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+#npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
+npm run deploy
 
 git commit -m "updated GitHub Pages"
 if [ $? -ne 0 ]; then
