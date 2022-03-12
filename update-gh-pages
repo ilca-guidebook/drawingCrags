@@ -16,8 +16,9 @@ git config user.email "${GITHUB_ACTOR}@bots.github.com"
 git checkout "$target_branch"
 git rebase "${remote_name}/${main_branch}"
 
-./bin/build "$build_dir"
-git add "$build_dir"
+# ./build "$build_dir"
+# git add "$build_dir"
+npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
 
 git commit -m "updated GitHub Pages"
 if [ $? -ne 0 ]; then
