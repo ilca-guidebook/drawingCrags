@@ -117,6 +117,7 @@ export default class drawingCragsState {
   public handleMouseUp = (e: MouseEvent) => {
     e.preventDefault();
     if (!this.imageLoaded) return;
+
     if (this.mode === MODES.IMAGE) {
       this.setIsDragging(false);
     }
