@@ -1,16 +1,15 @@
-name: Build and Deploy
+name: GitHub Pages
+
 on:
   push:
     branches:
-      - main
+      - master
+
 jobs:
-  deploy-to-gh-pages:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy with gh-pages
-        run: |
-          git remote add origin https://${DEPLOY_TOKEN}@github.com/ilca-guidebook/drawingCrags.git
-          git push
-          npx gh-pages -d build -u "github-actions-bot <support+actions@github.com>"
-           env:
-            DEPLOY_TOKEN: ${{ secrets.GH_PAGES_DEPLOY }}
+      - uses: actions/checkout@v1
+      - run: ./bin/update-gh-pages
+        env:
+          DEPLOY_TOKEN: ${{ secrets.GH_PAGES_DEPLOY }}
