@@ -25,6 +25,7 @@ const DrawingCragsBody: React.FC = () => {
     if (container.current) {
       drawingCragsStore.setContainer(container.current);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [container]);
 
   if (imageDimensions.x) {
@@ -50,6 +51,7 @@ const DrawingCragsBody: React.FC = () => {
     return () => {
       document.removeEventListener('keydown', drawingCragsStore.onKeyDown);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
