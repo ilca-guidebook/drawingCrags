@@ -3,17 +3,17 @@ import { WheelEvent, UIEvent, MouseEvent } from 'react';
 import { Line, Pos } from '../types';
 import { v1 as uuid } from 'uuid';
 
-export const CONTAINER_HEIGHT = 600;
-export const CONTAINER_WIDTH = 1200;
-
 enum MODES {
   INITIAL = 'initial',
   IMAGE = 'image',
   LINE_EDITING = 'lineEditing',
 }
 
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+
 export default class drawingCragsState {
-  public imageDimensions: Pos;
+  public naturalRatio: number;
+  public renderedImageDims: Pos;
 
   public mode: MODES;
 
@@ -44,7 +44,8 @@ export default class drawingCragsState {
 
     this.isDragging = false;
     this.mode = MODES.INITIAL;
-    this.imageDimensions = { x: 0, y: 0 };
+    this.naturalRatio = 0;
+    this.renderedImageDims = { x: 0, y: 0 };
     this.startPanPoz = { x: 0, y: 0 };
     this.panPoz = { x: 0, y: 0 };
     this.draggedLine = null;
@@ -64,9 +65,13 @@ export default class drawingCragsState {
     };
   }
 
-  public setImageDimensions(pos: Pos) {
-    this.imageDimensions = pos;
+  public setNaturalRatio(ratio: number) {
+    this.naturalRatio = ratio;
     this.imageLoaded = true;
+  }
+
+  public setRenderedImageDims(dims: Pos) {
+    this.renderedImageDims = dims;
   }
 
   public setIsDragging(isDragging: boolean) {
@@ -133,13 +138,8 @@ export default class drawingCragsState {
           y: e.clientY - this.startPanPoz.y,
         });
       }
-    } else if (this.mode === MODES.LINE_EDITING && this.container) {
-      const relativePointPos: Pos = {
-        x: e.clientX - this.container.offsetLeft + window.scrollX,
-        y: e.clientY - this.container.offsetTop + window.scrollY,
-      };
-
-      this.draggedLine = relativePointPos;
+    } else if (this.mode === MODES.LINE_EDITING && this.renderedImageDims.x) {
+      this.draggedLine = this.pointerToNormalized(e.clientX, e.clientY);
     }
   };
 
@@ -155,15 +155,7 @@ export default class drawingCragsState {
   };
 
   public loadLinesData = (linesJson: Line[]) => {
-    this.lines = linesJson.map(line => {
-      return {
-        ...line,
-        points: line.points.map(point => ({
-          x: point.x * this.imageDimensions.x,
-          y: point.y * this.imageDimensions.y,
-        })),
-      };
-    });
+    this.lines = linesJson;
   };
 
   public createNewLine = () => {
@@ -204,19 +196,17 @@ export default class drawingCragsState {
   };
 
   public handleClick = (e: MouseEvent) => {
-    if ((this.mode === MODES.INITIAL || this.mode === MODES.LINE_EDITING) && this.container) {
+    if ((this.mode === MODES.INITIAL || this.mode === MODES.LINE_EDITING) && this.renderedImageDims.x) {
       this.mode = MODES.LINE_EDITING;
 
       if (this.currentLineIndex < 0) {
         alert('first create a new line with a name');
         return;
       }
-      const relativePointPos: Pos = {
-        x: e.clientX - this.container.offsetLeft + window.scrollX,
-        y: e.clientY - this.container.offsetTop + window.scrollY,
-      };
 
-      this.lines[this.currentLineIndex].points.push(relativePointPos);
+      this.lines[this.currentLineIndex].points.push(
+        this.pointerToNormalized(e.clientX, e.clientY),
+      );
     }
   };
 
@@ -254,12 +244,10 @@ export default class drawingCragsState {
 
     if (active) {
       const bbox = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - bbox.left;
-      const y = e.clientY - bbox.top;
-
+      if (!bbox.width || !bbox.height) return;
       this.setLinePoint(lineId, pointIndex, {
-        x,
-        y,
+        x: clamp01((e.clientX - bbox.left) / bbox.width),
+        y: clamp01((e.clientY - bbox.top) / bbox.height),
       });
     }
   };
@@ -273,4 +261,19 @@ export default class drawingCragsState {
       };
     }
   };
+
+  private pointerToNormalized(clientX: number, clientY: number): Pos {
+    if (!this.container || !this.renderedImageDims.x || !this.renderedImageDims.y) {
+      return { x: 0, y: 0 };
+    }
+    const containerRect = this.container.getBoundingClientRect();
+    // Image content is bottom-left anchored inside the container.
+    const imageLeft = containerRect.left;
+    const imageBottom = containerRect.bottom;
+    const imageTop = imageBottom - this.renderedImageDims.y;
+    return {
+      x: clamp01((clientX - imageLeft) / this.renderedImageDims.x),
+      y: clamp01((clientY - imageTop) / this.renderedImageDims.y),
+    };
+  }
 }

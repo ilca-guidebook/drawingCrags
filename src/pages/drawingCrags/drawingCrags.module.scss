@@ -1,28 +1,89 @@
 .drawingCrags {
-  margin-top: 20px;
+  width: 100%;
+  max-width: 1800px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.mainArea {
+  display: flex;
+  gap: 20px;
   height: 600px;
-  width: 1200px;
-  margin: auto;
 }
 
 .imageContainer {
   position: relative;
   z-index: 1;
   overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 0;
   height: 100%;
   border: 2px solid #d5d5d5;
 }
+
+.jsonPanel {
+  flex: 0 0 340px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #d5d5d5;
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+.jsonPanelHeader {
+  font-weight: bold;
+  font-size: 90%;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.jsonHint {
+  font-size: 80%;
+  color: #999;
+  margin-bottom: 6px;
+}
+
+.jsonTextarea {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: pre;
+  resize: none;
+  border: 1px solid #d5d5d5;
+  border-radius: 2px;
+  padding: 6px;
+  color: #333;
+  background-color: #fafafa;
+  &:disabled {
+    background-color: #f0f0f0;
+    color: #999;
+  }
+}
+
+.jsonError {
+  margin-top: 6px;
+  font-size: 80%;
+  color: #c0392b;
+  word-break: break-word;
+}
 .cragImage {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom left;
 }
 
 .svgContainer {
   z-index: 2;
   position: absolute;
-  transform-origin: top left;
   bottom: 0;
+  left: 0;
   // pointer-events: none;
 }
 
@@ -56,8 +117,7 @@
 
 .btnContainer {
   display: flex;
-  width: 1200px;
-  margin: auto;
+  width: 100%;
   justify-content: space-between;
   margin-bottom: 10px;
 }

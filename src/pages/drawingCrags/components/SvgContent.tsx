@@ -10,14 +10,23 @@ type Props = {
   points: Array<Pos>;
   isSelected: boolean;
   lineId: string;
+  renderedImageDims: Pos;
 };
 
 const SELECTED_LINE_COLOR = '#1ad34b';
 const DEFAULT_LINE_COLOR = '#6247cb';
-const SvgContent: React.FC<Props> = ({ points, isSelected, lineId }) => {
+
+const SvgContent: React.FC<Props> = ({ points, isSelected, lineId, renderedImageDims }) => {
   const { draggedLine } = useDrawingCragsStore();
 
-  const linePoints = (isSelected && draggedLine ? [...points, draggedLine] : points).reduce(
+  const renderedPoints = (isSelected && draggedLine ? [...points, draggedLine] : points).map(
+    point => ({
+      x: point.x * renderedImageDims.x,
+      y: point.y * renderedImageDims.y,
+    }),
+  );
+
+  const linePoints = renderedPoints.reduce(
     (acc, point) => `${acc} ${point.x},${point.y}`,
     '',
   );
@@ -25,11 +34,13 @@ const SvgContent: React.FC<Props> = ({ points, isSelected, lineId }) => {
   const lineColor = isSelected ? SELECTED_LINE_COLOR : DEFAULT_LINE_COLOR;
 
   const lineBreakpoints = points.map((point, index) => {
+    const px = point.x * renderedImageDims.x;
+    const py = point.y * renderedImageDims.y;
     return (
       <Circle
-        key={`${point.y}-${point.y}-circle`}
-        positionY={point.y}
-        positionX={point.x}
+        key={`${index}-circle`}
+        positionY={py}
+        positionX={px}
         fill={lineColor}
         pointIndex={index}
         lineId={lineId}

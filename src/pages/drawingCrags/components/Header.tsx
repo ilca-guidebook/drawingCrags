@@ -20,6 +20,9 @@ const Header = () => {
           * You can also upload a previously generated file using the Import Lines Data button and
           edit Lines
           <br />
+          * Or paste / edit JSON directly in the panel on the right — it stays in sync with your
+          drawing
+          <br />
           Play around with the system a bit, we're sure you'll figure things out :)
         </div>
         <br />

@@ -26,16 +26,10 @@ type Props = {
 const ActionBar: React.FC<Props> = ({ onImageChange }) => {
   const drawingCragsStore = useDrawingCragsStore();
 
-  const { imageDimensions } = drawingCragsStore;
-
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const imageUrl = URL.createObjectURL(e.target.files[0]);
-
-      // reset
-      drawingCragsStore.setImageDimensions({ x: 0, y: 0 });
       drawingCragsStore.setScale(1);
-
       onImageChange(imageUrl);
     }
   };
@@ -59,19 +53,10 @@ const ActionBar: React.FC<Props> = ({ onImageChange }) => {
         line.points = line.points.reverse();
       }
     });
-    downloadObjectAsJson(
-      drawingCragsStore.lines
-        .sort((lineA, lineB) => lineA.points[0].x - lineB.points[0].x)
-        .map(line => {
-          return {
-            ...line,
-            points: line.points.map(point => ({
-              x: point.x / imageDimensions.x,
-              y: point.y / imageDimensions.y,
-            })),
-          };
-        }),
+    const sorted = [...drawingCragsStore.lines].sort(
+      (lineA, lineB) => lineA.points[0].x - lineB.points[0].x,
     );
+    downloadObjectAsJson(sorted);
   };
 
   return (

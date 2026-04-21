@@ -1,14 +1,17 @@
-let _config;
+import development from "./config.development.json";
+import local from "./config.local.json";
+import test from "./config.test.json";
 
-try {
-  if (process.env.REACT_APP_ENV) {
-    _config = require(`./config.${process.env.REACT_APP_ENV}.json`);
-  } else {
-    _config = require(`./config.${process.env.NODE_ENV}.json`);
-  }
-} catch (error) {
-  console.warn('problem loading config', error);
-}
+type ConfigShape = { testValue: string };
+
+const configsByEnv: Record<string, ConfigShape> = {
+  development,
+  local,
+  test,
+};
+
+const envKey = import.meta.env.VITE_APP_ENV ?? import.meta.env.MODE;
+const _config = configsByEnv[envKey] ?? configsByEnv.development;
 
 const config = {
   testValue: _config.testValue,
